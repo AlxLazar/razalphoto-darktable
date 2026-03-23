@@ -1799,71 +1799,98 @@ void init_presets(dt_lib_module_t *self)
                      self->plugin_name, self->version(), tx, strlen(tx), TRUE, 0);
 
   // lightroom-like workflow
-  // Groups mirror Lightroom's Develop panel: Basic / Tone / Color / Detail / Optics / Effects
-  SQA(TRUE);
+  // Each group mirrors a Lightroom Classic Develop panel:
+  //   Light      ≈ Basic (White Balance, Exposure, Tone, Clarity, Dehaze)
+  //   Tone Curve ≈ Tone Curve
+  //   Color      ≈ HSL/Color + Color Grading + Calibration
+  //   Detail     ≈ Detail (Sharpening + Noise Reduction)
+  //   Optics     ≈ Lens Corrections + Transform
+  //   Effects    ≈ Effects (Vignetting + Grain)
 
-  SMG(C_("modulegroup", "basic"), "basic");
-  AM("temperature");
-  AM("exposure");
-  AM("highlights");
-  AM("bilat");
-  AM("colorbalancergb");
-  AM("colorequal");
+  SQA(is_scene_referred);
+
+  // ---- Light (≈ LR "Basic" panel) ----
+  // White Balance (Temp/Tint), Exposure, tone mapping,
+  // Clarity (bilat), Dehaze
+  SMG(C_("modulegroup", "light"), "basic");
+  AM("temperature");          // White Balance → Temp + Tint
+  AM("exposure");             // Exposure
   if(wf_filmic || wf_none)
-    AM("filmicrgb");
+    AM("filmicrgb");          // Contrast, Whites, Blacks, Highlights
   if(wf_sigmoid || wf_none)
-    AM("sigmoid");
+    AM("sigmoid");            // Contrast, Whites, Blacks, Highlights
   if(wf_agx || wf_none)
-    AM("agx");
-  AM("toneequal");
-  AM("crop");
-  AM("ashift");
-  AM("flip");
+    AM("agx");                // Contrast, Whites, Blacks, Highlights
+  AM("toneequal");            // Highlights / Shadows (tone equalizer)
+  AM("highlights");           // Highlight Reconstruction (raw clipping recovery)
+  if(!is_scene_referred)
+    AM("shadhi");             // Shadows & Highlights (display-referred only)
+  AM("bilat");                // Clarity (local contrast)
+  AM("hazeremoval");          // Dehaze
 
-  SMG(C_("modulegroup", "tone"), "basic");
-  AM("tonecurve");
-  AM("rgbcurve");
-  AM("rgblevels");
-  AM("toneequal");
+  // ---- Tone Curve (≈ LR "Tone Curve" panel) ----
+  SMG(C_("modulegroup", "tone curve"), "tone");
+  AM("tonecurve");            // Parametric curve + point curve
+  AM("rgbcurve");             // Per-channel RGB curves
+  AM("rgblevels");            // Levels (Whites / Blacks)
+  AM("levels");               // Legacy levels
 
+  // ---- Color (≈ LR HSL/Color + Color Grading + Calibration) ----
+  // colorequal  → LR HSL panel   (8 colors × Hue / Sat / Lum)
+  // colorbalancergb → LR Color Grading (Shadows / Midtones / Highlights
+  //                   color wheels + global Vibrance/Saturation)
+  // channelmixerrgb / primaries → LR Calibration (RGB primaries)
   SMG(C_("modulegroup", "color"), "color");
-  AM("colorequal");
-  AM("colorbalancergb");
-  AM("channelmixerrgb");
-  AM("primaries");
-  AM("colorharmonizer");
-  AM("monochrome");
-  AM("colorzones");
-  AM("splittoning");
+  AM("colorequal");           // HSL: 8-color Hue / Sat / Lum → LR HSL
+  AM("colorbalancergb");      // Color Grading wheels → LR Color Grading
+  AM("channelmixerrgb");      // Channel mixer / Camera Calibration
+  AM("primaries");            // RGB primaries → LR Calibration
+  AM("colorharmonizer");      // Color Harmonizer
+  AM("colorzones");           // Legacy color zones
+  AM("splittoning");          // Legacy split toning
+  AM("monochrome");           // B&W conversion
 
+  // ---- Detail (≈ LR "Detail" panel: Sharpening + Noise Reduction) ----
+  // sharpen / diffuse → LR Sharpening (Amount, Radius, Detail, Masking)
+  // denoiseprofile / nlmeans / atrous → LR Noise Reduction (Luminance + Color)
   SMG(C_("modulegroup", "detail"), "correct");
-  AM("sharpen");
-  AM("denoiseprofile");
-  AM("nlmeans");
-  AM("atrous");
-  AM("diffuse");
+  AM("sharpen");              // Sharpening: Amount, Radius, Threshold
+  AM("diffuse");              // Diffuse or Sharpen (texture / frequency)
+  AM("denoiseprofile");       // Noise Reduction – profile-based (Lum + Color)
+  AM("nlmeans");              // Noise Reduction – non-local means
+  AM("atrous");               // Noise Reduction – wavelet / frequency separation
+  AM("rawdenoise");           // Raw noise reduction (pre-demosaic)
+  AM("hotpixels");            // Hot / dead pixel correction
 
+  // ---- Optics (≈ LR "Lens Corrections" + "Transform") ----
+  // lens       → LR Lens Profile tab (distortion, vignetting, CA)
+  // cacorrect  → LR manual CA sliders
+  // ashift     → LR Transform panel (Vertical, Horizontal, Rotate, Scale)
+  // crop / flip → LR Crop Overlay tool
   SMG(C_("modulegroup", "optics"), "correct");
-  AM("lens");
-  AM("ashift");
-  AM("cacorrect");
-  AM("cacorrectrgb");
-  AM("retouch");
-  AM("liquify");
-  AM("rasterfile");
-  AM("hazeremoval");
-  AM("hotpixels");
+  AM("lens");                 // Lens Profile Corrections
+  AM("cacorrect");            // Chromatic Aberration (display-referred)
+  AM("cacorrectrgb");         // Chromatic Aberration (scene-referred)
+  AM("ashift");               // Perspective / Transform
+  AM("crop");                 // Crop & Rotate
+  AM("flip");                 // Flip / Mirror
+  AM("retouch");              // Healing / Cloning
+  AM("liquify");              // Geometric distortion
+  AM("rasterfile");           // Raster overlay
 
+  // ---- Effects (≈ LR "Effects" panel: Vignetting + Grain) ----
+  // vignette → LR Post-Crop Vignetting (Amount, Midpoint, Roundness, Feather)
+  // grain    → LR Grain (Amount, Size, Roughness)
   SMG(C_("modulegroup", "effects"), "effect");
-  AM("grain");
-  AM("vignette");
-  AM("graduatednd");
-  AM("borders");
-  AM("blurs");
-  AM("overlay");
-  AM("watermark");
-  AM("censorize");
-  AM("enlargecanvas");
+  AM("vignette");             // Post-Crop Vignetting
+  AM("grain");                // Film Grain
+  AM("graduatednd");          // Graduated Filter
+  AM("borders");              // Borders
+  AM("blurs");                // Blurs
+  AM("overlay");              // Overlay
+  AM("watermark");            // Watermark
+  AM("censorize");            // Censor
+  AM("enlargecanvas");        // Canvas size
 
   dt_lib_presets_add(_("workflow: lightroom-like"),
                      self->plugin_name, self->version(), tx, strlen(tx), TRUE, 0);
