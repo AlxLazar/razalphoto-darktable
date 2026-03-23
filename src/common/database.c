@@ -51,7 +51,7 @@
 #define LAST_FULL_DATABASE_VERSION_DATA    10
 
 // You HAVE TO bump THESE versions whenever you add an update branches to _upgrade_*_schema_step()!
-#define CURRENT_DATABASE_VERSION_LIBRARY 57
+#define CURRENT_DATABASE_VERSION_LIBRARY 58
 #define CURRENT_DATABASE_VERSION_DATA    13
 
 #define USE_NESTED_TRANSACTIONS
@@ -2966,6 +2966,33 @@ static int _upgrade_library_schema_step(dt_database_t *db,
     TRY_EXEC("ALTER TABLE main.images ADD COLUMN flash_tagvalue INTEGER DEFAULT -1",
              "[init] can't add `flash_tagvalue' column to images table in database\n");
     new_version = 57;
+  }
+  else if(version == 57)
+  {
+    // Add virtual albums (Lightroom-style Collections):
+    //   albums      - named collections (manual, smart, or sets)
+    //   collection_images - photo membership for manual collections
+    TRY_EXEC("CREATE TABLE main.albums ("
+             "  id INTEGER PRIMARY KEY AUTOINCREMENT,"
+             "  name VARCHAR NOT NULL,"
+             "  parent_id INTEGER REFERENCES albums(id) ON DELETE CASCADE,"
+             "  is_set INTEGER NOT NULL DEFAULT 0,"
+             "  is_smart INTEGER NOT NULL DEFAULT 0,"
+             "  smart_rules TEXT,"
+             "  position INTEGER NOT NULL DEFAULT 0"
+             ")",
+             "[albums] can't create albums table");
+    TRY_EXEC("CREATE INDEX main.albums_parent_index ON albums (parent_id)",
+             "[albums] can't create parent index on albums");
+    TRY_EXEC("CREATE TABLE main.collection_images ("
+             "  collection_id INTEGER NOT NULL REFERENCES albums(id) ON DELETE CASCADE,"
+             "  imgid INTEGER NOT NULL REFERENCES images(id) ON DELETE CASCADE,"
+             "  PRIMARY KEY (collection_id, imgid)"
+             ")",
+             "[albums] can't create collection_images table");
+    TRY_EXEC("CREATE INDEX main.collection_images_imgid_index ON collection_images (imgid)",
+             "[albums] can't create imgid index on collection_images");
+    new_version = 58;
   }
   else
     new_version = version; // should be the fallback so that calling code sees that we are in an infinite loop

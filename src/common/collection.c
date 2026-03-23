@@ -654,6 +654,8 @@ const char *dt_collection_name_untranslated(const dt_collection_properties_t pro
       return N_("group");
     case DT_COLLECTION_PROP_DUPLICATES:
       return N_("duplicates");
+    case DT_COLLECTION_PROP_ALBUM:
+      return N_("album");
     case DT_COLLECTION_PROP_LOCAL_COPY:
       return N_("local copy");
     case DT_COLLECTION_PROP_MODULE:
@@ -1603,6 +1605,20 @@ static gchar *get_query_string(const dt_collection_properties_t property, const 
         query = g_strdup("1 = 1");
       }
       break;
+
+    case DT_COLLECTION_PROP_ALBUM: // virtual album (manual collection)
+    {
+      const int album_id = atoi(escaped_text);
+      if(album_id > 0)
+        // clang-format off
+        query = g_strdup_printf
+          ("(mi.id IN (SELECT imgid FROM main.collection_images WHERE collection_id = %d))",
+           album_id);
+        // clang-format on
+      else
+        query = g_strdup("1 = 1");
+      break;
+    }
 
     case DT_COLLECTION_PROP_ASPECT_RATIO: // aspect ratio
     {

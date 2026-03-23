@@ -90,6 +90,10 @@ typedef enum dt_signal_t
   /** \brief This signal is raised when a tag is added/deleted/changed  */
   DT_SIGNAL_TAG_CHANGED,
 
+  /** \brief This signal is raised when an album (virtual collection) is created/renamed/deleted
+      or its membership changes. No params. */
+  DT_SIGNAL_ALBUMS_CHANGED,
+
   /** \brief This signal is raised when a geotag is added/deleted/changed  */
   // when imgs <> NULL these images have some geotag changes
   // when imgs == NULL locations have changed

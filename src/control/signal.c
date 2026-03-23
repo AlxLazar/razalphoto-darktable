@@ -120,6 +120,8 @@ static dt_signal_description _signal_description[DT_SIGNAL_COUNT] = {
     NULL, NULL, G_TYPE_NONE, g_cclosure_marshal_VOID__VOID, 0, NULL, NULL, FALSE },
   [DT_SIGNAL_TAG_CHANGED] = { "dt-tag-changed",
     NULL, NULL, G_TYPE_NONE, g_cclosure_marshal_VOID__VOID, 0, NULL, NULL, FALSE },
+  [DT_SIGNAL_ALBUMS_CHANGED] = { "dt-albums-changed",
+    NULL, NULL, G_TYPE_NONE, g_cclosure_marshal_VOID__VOID, 0, NULL, NULL, FALSE },
   [DT_SIGNAL_GEOTAG_CHANGED] = { "dt-geotag-changed",
     NULL, NULL, G_TYPE_NONE, g_cclosure_marshal_generic, 2, geotag_arg,
     G_CALLBACK(_image_geotag_destroy_callback), FALSE },

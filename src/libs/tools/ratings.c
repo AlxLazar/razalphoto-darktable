@@ -115,6 +115,7 @@ void gui_init(dt_lib_module_t *self)
   dt_shortcut_register(ac, 4, 0, GDK_KEY_4, 0);
   dt_shortcut_register(ac, 5, 0, GDK_KEY_5, 0);
   dt_shortcut_register(ac, 6, 0, GDK_KEY_r, 0);
+  dt_shortcut_register(ac, 6, 0, GDK_KEY_x, 0);  // match Lightroom's X=reject convention
 
 }
 

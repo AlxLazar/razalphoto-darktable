@@ -26,6 +26,7 @@ FILE(GLOB SOURCE_FILES
   "common/box_filters.cc"
   "common/cache.c"
   "common/calculator.c"
+  "common/albums.c"
   "common/collection.c"
   "common/color_harmony.c"
   "common/color_picker.c"

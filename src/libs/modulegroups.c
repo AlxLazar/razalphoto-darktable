@@ -1798,6 +1798,76 @@ void init_presets(dt_lib_module_t *self)
   dt_lib_presets_add(_("workflow: scene-referred"),
                      self->plugin_name, self->version(), tx, strlen(tx), TRUE, 0);
 
+  // lightroom-like workflow
+  // Groups mirror Lightroom's Develop panel: Basic / Tone / Color / Detail / Optics / Effects
+  SQA(TRUE);
+
+  SMG(C_("modulegroup", "basic"), "basic");
+  AM("temperature");
+  AM("exposure");
+  AM("highlights");
+  AM("bilat");
+  AM("colorbalancergb");
+  AM("colorequal");
+  if(wf_filmic || wf_none)
+    AM("filmicrgb");
+  if(wf_sigmoid || wf_none)
+    AM("sigmoid");
+  if(wf_agx || wf_none)
+    AM("agx");
+  AM("toneequal");
+  AM("crop");
+  AM("ashift");
+  AM("flip");
+
+  SMG(C_("modulegroup", "tone"), "basic");
+  AM("tonecurve");
+  AM("rgbcurve");
+  AM("rgblevels");
+  AM("toneequal");
+
+  SMG(C_("modulegroup", "color"), "color");
+  AM("colorequal");
+  AM("colorbalancergb");
+  AM("channelmixerrgb");
+  AM("primaries");
+  AM("colorharmonizer");
+  AM("monochrome");
+  AM("colorzones");
+  AM("splittoning");
+
+  SMG(C_("modulegroup", "detail"), "correct");
+  AM("sharpen");
+  AM("denoiseprofile");
+  AM("nlmeans");
+  AM("atrous");
+  AM("diffuse");
+
+  SMG(C_("modulegroup", "optics"), "correct");
+  AM("lens");
+  AM("ashift");
+  AM("cacorrect");
+  AM("cacorrectrgb");
+  AM("retouch");
+  AM("liquify");
+  AM("rasterfile");
+  AM("hazeremoval");
+  AM("hotpixels");
+
+  SMG(C_("modulegroup", "effects"), "effect");
+  AM("grain");
+  AM("vignette");
+  AM("graduatednd");
+  AM("borders");
+  AM("blurs");
+  AM("overlay");
+  AM("watermark");
+  AM("censorize");
+  AM("enlargecanvas");
+
+  dt_lib_presets_add(_("workflow: lightroom-like"),
+                     self->plugin_name, self->version(), tx, strlen(tx), TRUE, 0);
+
   // search only (only active modules visible)
   SNQA();
   dt_lib_presets_add(_("search only"),
