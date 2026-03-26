@@ -6,7 +6,7 @@ add_definitions(-include common/module_api.h)
 add_definitions(-include libs/lib_api.h)
 
 # The modules
-set(MODULES albums import export copy_history styles tagging image select collect recentcollect filtering metadata metadata_view navigation histogram history snapshots modulegroups backgroundjobs colorpicker masks session duplicate ioporder)
+set(MODULES albums lrpresets import export copy_history styles tagging image select collect recentcollect filtering metadata metadata_view navigation histogram history snapshots modulegroups backgroundjobs colorpicker masks session duplicate ioporder)
 
 # The tools
 set(MODULES ${MODULES} viewswitcher)
@@ -25,6 +25,7 @@ set(MODULES ${MODULES} image_infos)
 
 # modules
 add_library(albums MODULE "albums.c")
+add_library(lrpresets MODULE "lrpresets.c")
 add_library(import MODULE "import.c")
 add_library(export MODULE "export.c" "export_metadata.c")
 add_library(copy_history MODULE "copy_history.c")

@@ -203,6 +203,55 @@ typedef struct dt_iop_colorin_params_v1_t
 
 #undef DT_IOP_COLOR_ICC_LEN_V1
 
+/* shadhi — highlights/shadows recovery (v5) */
+#define LRDT_SHADHI_VERSION 5
+typedef struct dt_iop_shadhi_params_t
+{
+  int order;                  /* dt_gaussian_order_t */
+  float radius;
+  float shadows;
+  float whitepoint;
+  float highlights;
+  float reserved2;
+  float compress;
+  float shadows_ccorrect;
+  float highlights_ccorrect;
+  unsigned int flags;
+  float low_approximation;
+  int shadhi_algo;            /* dt_iop_shadhi_algo_t */
+} dt_iop_shadhi_params_t;
+
+/* sharpen (v1) */
+#define LRDT_SHARPEN_VERSION 1
+typedef struct dt_iop_sharpen_params_t
+{
+  float radius;
+  float amount;
+  float threshold;
+} dt_iop_sharpen_params_t;
+
+/* colorbalancergb — global saturation, vibrance, contrast (v5) */
+#define LRDT_COLORBALANCERGB_VERSION 5
+typedef struct dt_iop_colorbalancergb_params_t
+{
+  float shadows_Y, shadows_C, shadows_H;
+  float midtones_Y, midtones_C, midtones_H;
+  float highlights_Y, highlights_C, highlights_H;
+  float global_Y, global_C, global_H;
+  float shadows_weight;
+  float white_fulcrum;
+  float highlights_weight;
+  float chroma_shadows, chroma_highlights, chroma_global, chroma_midtones;
+  float saturation_global, saturation_highlights, saturation_midtones, saturation_shadows;
+  float hue_angle;
+  float brilliance_global, brilliance_highlights, brilliance_midtones, brilliance_shadows;
+  float mask_grey_fulcrum;
+  float vibrance;
+  float grey_fulcrum;
+  float contrast;
+  int saturation_formula;     /* dt_iop_colorbalancrgb_saturation_t */
+} dt_iop_colorbalancergb_params_t;
+
 //
 // end of iop structs
 //
@@ -426,6 +475,15 @@ typedef struct lr_data_t
 
   dt_iop_bilat_params_t pbl;
   gboolean has_bilat;
+
+  dt_iop_shadhi_params_t psh;
+  gboolean has_shadhi;
+
+  dt_iop_sharpen_params_t psp;
+  gboolean has_sharpen;
+
+  dt_iop_colorbalancergb_params_t pcb;
+  gboolean has_colorbalance;
 
   gboolean has_tags;
 
@@ -800,6 +858,86 @@ static void _lrop(const dt_develop_t *dev, const xmlDocPtr doc, const dt_imgid_t
       {
         data->has_bilat = TRUE;
         data->pbl.detail = lr2dt_clarity((float)v);
+      }
+    }
+    else if(!xmlStrcmp(name, (const xmlChar *)"Highlights2012"))
+    {
+      const float v = g_ascii_strtod((char *)value, NULL);
+      if(v != 0.0f)
+      {
+        data->has_shadhi = TRUE;
+        // LR -100 = max recovery (pull highlights down), +100 = boost
+        // shadhi.highlights: positive = push up, negative = pull down → invert and scale
+        data->psh.highlights = -v * 0.5f;
+      }
+    }
+    else if(!xmlStrcmp(name, (const xmlChar *)"Shadows2012"))
+    {
+      const float v = g_ascii_strtod((char *)value, NULL);
+      if(v != 0.0f)
+      {
+        data->has_shadhi = TRUE;
+        // LR +100 = lift shadows up, shadhi.shadows same sign
+        data->psh.shadows = v * 0.5f;
+      }
+    }
+    else if(!xmlStrcmp(name, (const xmlChar *)"Whites2012"))
+    {
+      const float v = g_ascii_strtod((char *)value, NULL);
+      if(v != 0.0f)
+      {
+        data->has_exposure = TRUE;
+        // small additive EV shift on top of Exposure2012
+        data->pe.exposure += v / 100.0f * 0.5f;
+      }
+    }
+    else if(!xmlStrcmp(name, (const xmlChar *)"Contrast2012"))
+    {
+      const float v = g_ascii_strtod((char *)value, NULL);
+      if(v != 0.0f)
+      {
+        data->has_colorbalance = TRUE;
+        // colorbalancergb contrast range is approximately -1..+1
+        data->pcb.contrast = v / 100.0f * 0.25f;
+      }
+    }
+    else if(!xmlStrcmp(name, (const xmlChar *)"Saturation"))
+    {
+      const float v = g_ascii_strtod((char *)value, NULL);
+      if(v != 0.0f)
+      {
+        data->has_colorbalance = TRUE;
+        // LR -100..+100 → colorbalancergb -1..+1
+        data->pcb.saturation_global = v / 100.0f;
+      }
+    }
+    else if(!xmlStrcmp(name, (const xmlChar *)"Vibrance"))
+    {
+      const float v = g_ascii_strtod((char *)value, NULL);
+      if(v != 0.0f)
+      {
+        data->has_colorbalance = TRUE;
+        data->pcb.vibrance = v / 100.0f;
+      }
+    }
+    else if(!xmlStrcmp(name, (const xmlChar *)"Sharpness"))
+    {
+      const int v = atoi((char *)value);
+      if(v != 0)
+      {
+        data->has_sharpen = TRUE;
+        data->psp.amount = (float)v / 100.0f;
+        if(data->psp.radius == 0.0f) data->psp.radius = 2.0f;
+        if(data->psp.threshold == 0.0f) data->psp.threshold = 0.01f;
+      }
+    }
+    else if(!xmlStrcmp(name, (const xmlChar *)"SharpenRadius"))
+    {
+      const float v = g_ascii_strtod((char *)value, NULL);
+      if(v > 0.0f)
+      {
+        data->has_sharpen = TRUE;
+        data->psp.radius = v;
       }
     }
     else if(!xmlStrcmp(name, (const xmlChar *)"Rating"))
@@ -1243,6 +1381,9 @@ gboolean dt_lightroom_import(dt_imgid_t imgid, dt_develop_t *dev, gboolean iauto
   data.has_colorzones = FALSE;
   data.has_splittoning = FALSE;
   data.has_bilat = FALSE;
+  data.has_shadhi = FALSE;
+  data.has_sharpen = FALSE;
+  data.has_colorbalance = FALSE;
   data.has_tags = FALSE;
   data.rating = 0;
   data.has_rating = FALSE;
@@ -1567,6 +1708,41 @@ gboolean dt_lightroom_import(dt_imgid_t imgid, dt_develop_t *dev, gboolean iauto
     refresh_needed = TRUE;
   }
 
+  if(dev != NULL && data.has_shadhi)
+  {
+    // set sensible defaults for all fields not driven by LR values
+    data.psh.radius = 100.0f;
+    data.psh.compress = 50.0f;
+    data.psh.shadows_ccorrect = 100.0f;
+    data.psh.highlights_ccorrect = 50.0f;
+    data.psh.low_approximation = 0.01f;
+
+    dt_add_hist(imgid, "shadhi", (dt_iop_params_t *)&data.psh, sizeof(dt_iop_shadhi_params_t), imported,
+                sizeof(imported), LRDT_SHADHI_VERSION, &n_import);
+    refresh_needed = TRUE;
+  }
+
+  if(dev != NULL && data.has_sharpen)
+  {
+    dt_add_hist(imgid, "sharpen", (dt_iop_params_t *)&data.psp, sizeof(dt_iop_sharpen_params_t), imported,
+                sizeof(imported), LRDT_SHARPEN_VERSION, &n_import);
+    refresh_needed = TRUE;
+  }
+
+  if(dev != NULL && data.has_colorbalance)
+  {
+    // set non-zero defaults that make colorbalancergb behave neutrally
+    data.pcb.shadows_weight = 1.0f;
+    data.pcb.highlights_weight = 1.0f;
+    data.pcb.mask_grey_fulcrum = 0.1845f;
+    data.pcb.grey_fulcrum = 0.1845f;
+
+    dt_add_hist(imgid, "colorbalancergb", (dt_iop_params_t *)&data.pcb,
+                sizeof(dt_iop_colorbalancergb_params_t), imported,
+                sizeof(imported), LRDT_COLORBALANCERGB_VERSION, &n_import);
+    refresh_needed = TRUE;
+  }
+
   if(data.has_tags)
   {
     if(imported[0]) g_strlcat(imported, ", ", sizeof(imported));
@@ -1624,6 +1800,248 @@ gboolean dt_lightroom_import(dt_imgid_t imgid, dt_develop_t *dev, gboolean iauto
   }
   return TRUE;
 }
+gboolean dt_lightroom_apply_preset(dt_imgid_t imgid, dt_develop_t *dev, const char *xmp_path,
+                                   gboolean silent)
+{
+  if(!dt_is_valid_imgid(imgid) || !xmp_path) return FALSE;
+
+  char imported[256] = { 0 };
+  int n_import = 0;
+  gboolean refresh_needed = FALSE;
+
+  // Load XMP from the provided path
+  xmlDocPtr doc = xmlReadFile(xmp_path, NULL, XML_PARSE_NOERROR | XML_PARSE_NOWARNING);
+  if(!doc)
+  {
+    dt_control_log(_("cannot open preset file `%s'!"), xmp_path);
+    return FALSE;
+  }
+
+  xmlNodePtr entryNode = xmlDocGetRootElement(doc);
+  if(!entryNode || xmlStrcmp(entryNode->name, (const xmlChar *)"xmpmeta"))
+  {
+    dt_control_log(_("not an XMP file: `%s'"), xmp_path);
+    xmlFreeDoc(doc);
+    return FALSE;
+  }
+
+  xmlXPathContextPtr xpathCtx = xmlXPathNewContext(doc);
+  if(!xpathCtx)
+  {
+    xmlFreeDoc(doc);
+    return FALSE;
+  }
+
+  // Initialize parse state
+  lr_data_t data;
+  memset(&data, 0, sizeof(data));
+  data.curve_kind = linear;
+  data.fratio = NAN;
+  data.crop_roundness = NAN;
+  data.lat = NAN;
+  data.lon = NAN;
+  data.lat_ref = NAN;
+  data.lon_ref = NAN;
+  data.orientation = EXIF_ORIENTATION_NONE;
+
+  // Register namespaces and parse the XMP
+  xmlXPathRegisterNs(xpathCtx, BAD_CAST "crs", BAD_CAST "http://ns.adobe.com/camera-raw-settings/1.0/");
+  xmlXPathRegisterNs(xpathCtx, BAD_CAST "dc",  BAD_CAST "http://purl.org/dc/elements/1.1/");
+  xmlXPathRegisterNs(xpathCtx, BAD_CAST "tiff", BAD_CAST "http://ns.adobe.com/tiff/1.0/");
+  xmlXPathRegisterNs(xpathCtx, BAD_CAST "xmp", BAD_CAST "http://ns.adobe.com/xap/1.0/");
+  xmlXPathRegisterNs(xpathCtx, BAD_CAST "exif", BAD_CAST "http://ns.adobe.com/exif/1.0/");
+  xmlXPathRegisterNs(xpathCtx, BAD_CAST "lr",  BAD_CAST "http://ns.adobe.com/lightroom/1.0/");
+  xmlXPathRegisterNs(xpathCtx, BAD_CAST "rdf", BAD_CAST "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
+
+  static char *names[] = { "crs", "dc", "tiff", "xmp", "exif", "lr", NULL };
+  for(int i = 0; names[i] != NULL; i++)
+  {
+    char expr[50];
+    snprintf(expr, sizeof(expr), "//%s:*", names[i]);
+    _handle_xpath(dev, doc, imgid, xpathCtx, (const xmlChar *)expr, &data);
+    snprintf(expr, sizeof(expr), "//@%s:*", names[i]);
+    _handle_xpath(dev, doc, imgid, xpathCtx, (const xmlChar *)expr, &data);
+  }
+
+  xmlXPathFreeContext(xpathCtx);
+  xmlFreeDoc(doc);
+
+  // Apply all develop settings — note: unlike dt_lightroom_import() we apply even when dev == NULL
+  // (writes directly to database; caller is responsible for signalling)
+
+  if(data.has_exposure)
+  {
+    dt_add_hist(imgid, "exposure", (dt_iop_params_t *)&data.pe, sizeof(dt_iop_exposure_params_t),
+                imported, sizeof(imported), LRDT_EXPOSURE_VERSION, &n_import);
+    refresh_needed = TRUE;
+  }
+
+  if(data.has_grain)
+  {
+    data.pg.channel = 0;
+    dt_add_hist(imgid, "grain", (dt_iop_params_t *)&data.pg, sizeof(dt_iop_grain_params_t),
+                imported, sizeof(imported), LRDT_GRAIN_VERSION, &n_import);
+    refresh_needed = TRUE;
+  }
+
+  if(data.has_vignette)
+  {
+    const float base_ratio = 1.325f / 1.5f;
+    data.pv.autoratio = FALSE;
+    data.pv.dithering = DITHER_8BIT;
+    data.pv.center.x = 0.0f;
+    data.pv.center.y = 0.0f;
+    data.pv.shape = 1.0f;
+    data.pv.whratio = base_ratio;
+
+    dt_add_hist(imgid, "vignette", (dt_iop_params_t *)&data.pv, sizeof(dt_iop_vignette_params_t),
+                imported, sizeof(imported), LRDT_VIGNETTE_VERSION, &n_import);
+    refresh_needed = TRUE;
+  }
+
+  if(data.curve_kind != linear
+     || data.ptc_value[0] != 0 || data.ptc_value[1] != 0
+     || data.ptc_value[2] != 0 || data.ptc_value[3] != 0)
+  {
+    const int total_pts = (data.curve_kind == custom) ? data.n_pts : 6;
+    data.ptc.tonecurve_nodes[ch_L] = total_pts;
+    data.ptc.tonecurve_nodes[ch_a] = 7;
+    data.ptc.tonecurve_nodes[ch_b] = 7;
+    data.ptc.tonecurve_type[ch_L] = CUBIC_SPLINE;
+    data.ptc.tonecurve_type[ch_a] = CUBIC_SPLINE;
+    data.ptc.tonecurve_type[ch_b] = CUBIC_SPLINE;
+    data.ptc.tonecurve_autoscale_ab = 1;
+    data.ptc.tonecurve_preset = 0;
+
+    float linear_ab[7] = { 0.0f, 0.08f, 0.3f, 0.5f, 0.7f, 0.92f, 1.0f };
+    for(int k = 0; k < 7; k++) data.ptc.tonecurve[ch_a][k].x = linear_ab[k];
+    for(int k = 0; k < 7; k++) data.ptc.tonecurve[ch_a][k].y = linear_ab[k];
+    for(int k = 0; k < 7; k++) data.ptc.tonecurve[ch_b][k].x = linear_ab[k];
+    for(int k = 0; k < 7; k++) data.ptc.tonecurve[ch_b][k].y = linear_ab[k];
+
+    if(data.curve_kind == linear)
+    {
+      data.ptc.tonecurve[ch_L][0].x = 0.0f;
+      data.ptc.tonecurve[ch_L][0].y = 0.0f;
+      data.ptc.tonecurve[ch_L][1].x = data.ptc_split[0] / 2.0f;
+      data.ptc.tonecurve[ch_L][1].y = data.ptc_split[0] / 2.0f;
+      data.ptc.tonecurve[ch_L][2].x = data.ptc_split[1] - (data.ptc_split[1] - data.ptc_split[0]) / 2.0f;
+      data.ptc.tonecurve[ch_L][2].y = data.ptc_split[1] - (data.ptc_split[1] - data.ptc_split[0]) / 2.0f;
+      data.ptc.tonecurve[ch_L][3].x = data.ptc_split[1] + (data.ptc_split[2] - data.ptc_split[1]) / 2.0f;
+      data.ptc.tonecurve[ch_L][3].y = data.ptc_split[1] + (data.ptc_split[2] - data.ptc_split[1]) / 2.0f;
+      data.ptc.tonecurve[ch_L][4].x = data.ptc_split[2] + (1.0f - data.ptc_split[2]) / 2.0f;
+      data.ptc.tonecurve[ch_L][4].y = data.ptc_split[2] + (1.0f - data.ptc_split[2]) / 2.0f;
+      data.ptc.tonecurve[ch_L][5].x = 1.0f;
+      data.ptc.tonecurve[ch_L][5].y = 1.0f;
+    }
+    else
+    {
+      for(int k = 0; k < total_pts; k++)
+      {
+        data.ptc.tonecurve[ch_L][k].x = data.curve_pts[k][0] / 255.0f;
+        data.ptc.tonecurve[ch_L][k].y = data.curve_pts[k][1] / 255.0f;
+      }
+    }
+
+    if(data.curve_kind != custom)
+    {
+      data.ptc.tonecurve[ch_L][1].y += data.ptc.tonecurve[ch_L][1].y * ((float)data.ptc_value[0] / 100.0f);
+      data.ptc.tonecurve[ch_L][2].y += data.ptc.tonecurve[ch_L][2].y * ((float)data.ptc_value[1] / 100.0f);
+      data.ptc.tonecurve[ch_L][3].y += data.ptc.tonecurve[ch_L][3].y * ((float)data.ptc_value[2] / 100.0f);
+      data.ptc.tonecurve[ch_L][4].y += data.ptc.tonecurve[ch_L][4].y * ((float)data.ptc_value[3] / 100.0f);
+      if(data.ptc.tonecurve[ch_L][1].y > data.ptc.tonecurve[ch_L][2].y)
+        data.ptc.tonecurve[ch_L][1].y = data.ptc.tonecurve[ch_L][2].y;
+      if(data.ptc.tonecurve[ch_L][3].y > data.ptc.tonecurve[ch_L][4].y)
+        data.ptc.tonecurve[ch_L][4].y = data.ptc.tonecurve[ch_L][3].y;
+    }
+
+    dt_add_hist(imgid, "tonecurve", (dt_iop_params_t *)&data.ptc, sizeof(dt_iop_tonecurve_params_t),
+                imported, sizeof(imported), LRDT_TONECURVE_VERSION, &n_import);
+    refresh_needed = TRUE;
+  }
+
+  if(data.has_colorzones)
+  {
+    data.pcz.channel = DT_IOP_COLORZONES_h;
+    for(int i = 0; i < 3; i++)
+      for(int k = 0; k < 8; k++)
+        data.pcz.equalizer_x[i][k] = k / (DT_IOP_COLORZONES_BANDS - 1.0f);
+
+    dt_add_hist(imgid, "colorzones", (dt_iop_params_t *)&data.pcz, sizeof(dt_iop_colorzones_params_t),
+                imported, sizeof(imported), LRDT_COLORZONES_VERSION, &n_import);
+    refresh_needed = TRUE;
+  }
+
+  if(data.has_splittoning)
+  {
+    data.pst.compress = 50.0f;
+    dt_add_hist(imgid, "splittoning", (dt_iop_params_t *)&data.pst, sizeof(dt_iop_splittoning_params_t),
+                imported, sizeof(imported), LRDT_SPLITTONING_VERSION, &n_import);
+    refresh_needed = TRUE;
+  }
+
+  if(data.has_bilat)
+  {
+    data.pbl.sigma_r = 100.0f;
+    data.pbl.sigma_s = 100.0f;
+    dt_add_hist(imgid, "bilat", (dt_iop_params_t *)&data.pbl, sizeof(dt_iop_bilat_params_t),
+                imported, sizeof(imported), LRDT_BILAT_VERSION, &n_import);
+    refresh_needed = TRUE;
+  }
+
+  if(data.has_shadhi)
+  {
+    data.psh.radius = 100.0f;
+    data.psh.compress = 50.0f;
+    data.psh.shadows_ccorrect = 100.0f;
+    data.psh.highlights_ccorrect = 50.0f;
+    data.psh.low_approximation = 0.01f;
+
+    dt_add_hist(imgid, "shadhi", (dt_iop_params_t *)&data.psh, sizeof(dt_iop_shadhi_params_t),
+                imported, sizeof(imported), LRDT_SHADHI_VERSION, &n_import);
+    refresh_needed = TRUE;
+  }
+
+  if(data.has_sharpen)
+  {
+    dt_add_hist(imgid, "sharpen", (dt_iop_params_t *)&data.psp, sizeof(dt_iop_sharpen_params_t),
+                imported, sizeof(imported), LRDT_SHARPEN_VERSION, &n_import);
+    refresh_needed = TRUE;
+  }
+
+  if(data.has_colorbalance)
+  {
+    data.pcb.shadows_weight = 1.0f;
+    data.pcb.highlights_weight = 1.0f;
+    data.pcb.mask_grey_fulcrum = 0.1845f;
+    data.pcb.grey_fulcrum = 0.1845f;
+
+    dt_add_hist(imgid, "colorbalancergb", (dt_iop_params_t *)&data.pcb,
+                sizeof(dt_iop_colorbalancergb_params_t),
+                imported, sizeof(imported), LRDT_COLORBALANCERGB_VERSION, &n_import);
+    refresh_needed = TRUE;
+  }
+
+  if(refresh_needed)
+  {
+    if(!silent)
+      dt_control_log(ngettext("%s has been applied", "%s have been applied", n_import), imported);
+
+    if(dev != NULL && dev->gui_attached)
+    {
+      dt_dev_reload_history_items(dev);
+      dt_dev_modulegroups_set(darktable.develop, dt_dev_modulegroups_get(darktable.develop));
+      if(!silent)
+        dt_image_synch_xmp(imgid);
+    }
+
+    if(!silent)
+      DT_CONTROL_SIGNAL_RAISE(DT_SIGNAL_DEVELOP_HISTORY_CHANGE);
+  }
+
+  return refresh_needed;
+}
+
 // clang-format off
 // modelines: These editor modelines have been set for all relevant files by tools/update_modelines.py
 // vim: shiftwidth=2 expandtab tabstop=2 cindent

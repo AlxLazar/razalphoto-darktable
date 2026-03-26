@@ -26,6 +26,14 @@
 */
 gboolean dt_lightroom_import(dt_imgid_t imgid, dt_develop_t *dev, gboolean iauto);
 
+/* Apply a standalone Lightroom/Camera Raw XMP preset file to imgid.
+   Develop settings (exposure, tone curve, colour, sharpness, etc.) are always applied.
+   When dev is non-NULL and gui_attached, the pipeline is refreshed live.
+   When dev is NULL (lighttable batch use), only the database is updated.
+   Returns TRUE if any settings were applied. */
+gboolean dt_lightroom_apply_preset(dt_imgid_t imgid, dt_develop_t *dev, const char *xmp_path,
+                                   gboolean silent);
+
 /* returns NULL if not found, or g_strdup'ed pathname, the caller should g_free it. */
 char *dt_get_lightroom_xmp(dt_imgid_t imgid);
 

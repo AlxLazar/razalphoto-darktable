@@ -142,3 +142,190 @@
 {
   color: @grey_65;
 }
+
+/* ════════════════════════════════════════════════════════════════════════
+   MODERN UI LAYER — transitions, shadows, rounded corners, accent colour
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* ── Accent colour ────────────────────────────────────────────────────── */
+@define-color accent_color #4a90d9;
+@define-color accent_color_dim alpha(#4a90d9, 0.20);
+
+/* ── CSS transitions — smooth state changes on all GTK-rendered widgets ─ */
+button,
+entry,
+spinbutton,
+combobox > box,
+check,
+radio,
+tab,
+.toggle,
+.dt_module_btn
+{
+  transition: background-color 150ms ease-out,
+              border-color     150ms ease-out,
+              color            100ms ease-out,
+              box-shadow       150ms ease-out;
+}
+
+/* ── Scrollbars — thin, modern pill style ─────────────────────────────── */
+scrollbar
+{
+  background-color: transparent;
+  border: none;
+}
+
+scrollbar.vertical   { min-width:  5px; }
+scrollbar.horizontal { min-height: 5px; }
+
+scrollbar slider
+{
+  min-width:        4px;
+  min-height:       4px;
+  border-radius:    999px;
+  background-color: @grey_30;
+  border:           none;
+  transition: background-color 150ms ease, min-width 150ms ease, min-height 150ms ease;
+}
+
+scrollbar slider:hover
+{
+  background-color: @grey_50;
+  min-width:        6px;
+  min-height:       6px;
+}
+
+scrollbar slider:active
+{
+  background-color: @grey_60;
+}
+
+scrollbar button { min-height: 0; min-width: 0; padding: 0; }
+
+/* ── Focus rings — accent blue outline ────────────────────────────────── */
+entry:focus,
+spinbutton:focus
+{
+  border-color: @accent_color;
+  box-shadow: 0 0 0 2px @accent_color_dim;
+  outline: none;
+}
+
+/* ── Border-radius hierarchy ──────────────────────────────────────────── */
+button          { border-radius: 4px; }
+entry           { border-radius: 4px; }
+spinbutton      { border-radius: 4px; }
+check           { border-radius: 3px; }
+
+#module-header  { border-radius: 4px 4px 0 0; }
+
+dialog          { border-radius: 10px; }
+dialog decoration { border-radius: 10px; }
+
+/* ── Shadows on floating surfaces ─────────────────────────────────────── */
+.popover,
+popover
+{
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.65),
+              0 2px  6px rgba(0, 0, 0, 0.40);
+}
+
+tooltip
+{
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.55);
+  padding: 5px 8px;
+}
+
+menu
+{
+  border-radius: 6px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.60),
+              0 1px  4px rgba(0, 0, 0, 0.30);
+  padding: 4px 0;
+  border: 1px solid @border_color;
+}
+
+menu menuitem
+{
+  border-radius: 3px;
+  margin: 1px 4px;
+  padding: 4px 8px;
+  transition: background-color 100ms ease-out;
+}
+
+menu menuitem:hover  { background-color: @grey_25; }
+menu menuitem:active { background-color: @grey_30; }
+menu separator       { margin: 3px 0; }
+
+/* ── Button hover polish ──────────────────────────────────────────────── */
+button:hover  { background-color: @grey_25; }
+button:active { background-color: @grey_30; }
+
+/* ── List / tree view rows — soft hover, accent selection ─────────────── */
+treeview.view row          { transition: background-color 100ms ease-out; }
+treeview.view row:hover    { background-color: alpha(@fg_color, 0.06); }
+treeview.view row:selected { background-color: alpha(@accent_color, 0.25); color: @fg_color; }
+treeview.view row:selected:focus { background-color: alpha(@accent_color, 0.35); }
+
+/* ── Module header — left accent bar for active modules ───────────────── */
+#module-header.active-module
+{
+  border-left: 3px solid @accent_color;
+  padding-left: 5px;
+}
+
+/* ── Panel section labels — subtle caps style ─────────────────────────── */
+#iop-panel-label,
+#lib-panel-label
+{
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: @grey_55;
+}
+
+/* ── Progress bars — rounded, accent coloured ─────────────────────────── */
+progressbar trough
+{
+  border-radius: 999px;
+  background-color: @grey_20;
+  min-height: 4px;
+}
+
+progressbar progress
+{
+  border-radius: 999px;
+  background-color: @accent_color;
+  min-height: 4px;
+}
+
+/* ── Separators — subtle, not harsh ──────────────────────────────────────*/
+separator { background-color: alpha(@fg_color, 0.08); margin: 2px 0; }
+
+/* ── Notebook tabs ────────────────────────────────────────────────────── */
+notebook tab
+{
+  border-radius: 4px 4px 0 0;
+  padding: 4px 12px;
+  transition: background-color 150ms ease-out;
+}
+
+notebook tab:checked { border-bottom: 2px solid @accent_color; }
+
+/* ── Entry / text fields — consistent padding ─────────────────────────── */
+entry { padding: 4px 8px; }
+
+/* ── Check and radio — accent active state ─────────────────────────────── */
+check:checked, radio:checked
+{
+  background-color: @accent_color;
+  border-color: @accent_color;
+  color: white;
+}
+
+/* ── Combo boxes ──────────────────────────────────────────────────────── */
+combobox button { border-radius: 4px; }
+combobox button:hover { background-color: @grey_25; }
