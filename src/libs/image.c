@@ -71,7 +71,7 @@ typedef enum dt_lib_metadata_id
 
 const char *name(dt_lib_module_t *self)
 {
-  return _("actions on selection");
+  return _("Actions on Selection");
 }
 
 dt_view_type_flags_t views(dt_lib_module_t *self)

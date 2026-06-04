@@ -34,7 +34,7 @@ DT_MODULE(1)
 
 const char *name(dt_lib_module_t *self)
 {
-  return _("gamepad");
+  return _("Gamepad");
 }
 
 dt_view_type_flags_t views(dt_lib_module_t *self)

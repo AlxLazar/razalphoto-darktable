@@ -128,7 +128,7 @@ typedef struct dt_iop_negadoctor_global_data_t
 
 const char *name()
 {
-  return _("negadoctor");
+  return _("Negadoctor");
 }
 
 const char *aliases()

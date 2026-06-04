@@ -80,7 +80,7 @@ typedef struct dt_iop_relight_global_data_t
 
 const char *name()
 {
-  return _("fill light");
+  return _("Fill Light");
 }
 
 int flags()

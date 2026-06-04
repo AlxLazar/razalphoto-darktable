@@ -66,7 +66,7 @@ typedef struct dt_iop_highpass_global_data_t
 
 const char *name()
 {
-  return _("highpass");
+  return _("Highpass");
 }
 
 const char **description(dt_iop_module_t *self)

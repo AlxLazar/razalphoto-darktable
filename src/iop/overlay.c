@@ -143,7 +143,7 @@ typedef struct dt_iop_overlay_gui_data_t
 
 const char *name()
 {
-  return _("composite");
+  return _("Composite");
 }
 
 const char **description(dt_iop_module_t *self)

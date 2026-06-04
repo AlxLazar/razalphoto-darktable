@@ -276,15 +276,14 @@ treeview.view row:selected:focus { background-color: alpha(@accent_color, 0.35);
   padding-left: 5px;
 }
 
-/* ── Panel section labels — subtle caps style ─────────────────────────── */
+/* ── Panel section labels — clean Title Case style ─────────────────────── */
 #iop-panel-label,
 #lib-panel-label
 {
-  font-size: 0.75rem;
+  font-size: 0.85rem;
   font-weight: 600;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: @grey_55;
+  letter-spacing: 0.03em;
+  color: @grey_80;
 }
 
 /* ── Progress bars — rounded, accent coloured ─────────────────────────── */
@@ -329,3 +328,101 @@ check:checked, radio:checked
 /* ── Combo boxes ──────────────────────────────────────────────────────── */
 combobox button { border-radius: 4px; }
 combobox button:hover { background-color: @grey_25; }
+
+/* ════════════════════════════════════════════════════════════════════════
+   ENHANCED UI POLISH — module headers, sections, controls, dialogs
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* ── Module header — subtle background + hover ─────────────────────────── */
+#module-header
+{
+  background-color: alpha(@fg_color, 0.02);
+  transition: background-color 150ms ease-out;
+}
+
+#module-header:hover
+{
+  background-color: alpha(@fg_color, 0.04);
+}
+
+/* Focused module — accent glow */
+#iop-expander.dt_module_focus #module-header
+{
+  background-color: alpha(@accent_color, 0.06);
+}
+
+/* ── Section labels inside modules — subtle divider ────────────────────── */
+.dt_section_label
+{
+  border-bottom: 1px solid alpha(@fg_color, 0.10);
+  margin: 0.35em 0 0.2em 0;
+  padding: 0.25em 0;
+  color: @grey_65;
+  font-weight: 600;
+  font-size: 0.85em;
+  letter-spacing: 0.02em;
+}
+
+/* ── Bauhaus popup — shadow + rounded ──────────────────────────────────── */
+.dt_bauhaus_popup
+{
+  background-color: @grey_10;
+  border: 1px solid @border_color;
+  border-radius: 6px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.55);
+  padding: 0.42em;
+}
+
+/* ── Entry fields — refined borders ────────────────────────────────────── */
+entry
+{
+  padding: 5px 8px;
+  border: 1px solid alpha(@fg_color, 0.12);
+  background-color: @grey_10;
+  color: @fg_color;
+}
+
+entry:hover  { border-color: alpha(@fg_color, 0.20); }
+entry:disabled { color: @disabled_fg_color; border-color: alpha(@fg_color, 0.06); }
+
+/* ── Buttons — refined borders and text ────────────────────────────────── */
+button
+{
+  padding: 4px 10px;
+  border: 1px solid alpha(@fg_color, 0.10);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+button:hover  { border-color: alpha(@fg_color, 0.15); }
+button:active { border-color: alpha(@fg_color, 0.18); }
+
+button:checked
+{
+  background-color: alpha(@accent_color, 0.15);
+  border-color: alpha(@accent_color, 0.30);
+  color: @fg_color;
+}
+
+/* ── Dialogs — refined shadows ─────────────────────────────────────────── */
+dialog
+{
+  border: 1px solid @border_color;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.70),
+              0  4px 12px rgba(0, 0, 0, 0.45);
+}
+
+/* ── Collapsible sections — rounded bottom ─────────────────────────────── */
+#collapsible { border-radius: 0 0 4px 4px; }
+
+/* ── Separators — even more subtle ─────────────────────────────────────── */
+separator
+{
+  background-color: alpha(@fg_color, 0.06);
+  margin: 3px 0;
+  min-height: 1px;
+}
+
+/* ── Check / radio — hover border feedback ─────────────────────────────── */
+check, radio { border: 1px solid alpha(@fg_color, 0.20); }
+check:hover, radio:hover { border-color: alpha(@fg_color, 0.35); }

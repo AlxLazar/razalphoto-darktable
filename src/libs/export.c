@@ -172,7 +172,7 @@ static inline float pixels2print(dt_lib_export_t *self,
 
 const char *name(dt_lib_module_t *self)
 {
-  return _("export");
+  return _("Export");
 }
 
 const char *description(dt_lib_module_t *self)

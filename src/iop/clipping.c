@@ -342,7 +342,7 @@ const char *deprecated_msg()
 
 const char *name()
 {
-  return _("crop and rotate");
+  return _("Crop and Rotate");
 }
 
 const char *aliases()

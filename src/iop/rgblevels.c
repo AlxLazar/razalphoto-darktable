@@ -95,7 +95,7 @@ typedef struct dt_iop_rgblevels_global_data_t
 
 const char *name()
 {
-  return _("rgb levels");
+  return _("RGB Levels");
 }
 
 int default_group()

@@ -183,7 +183,7 @@ typedef struct dt_lib_import_t
 
 const char *name(dt_lib_module_t *self)
 {
-  return _("import");
+  return _("Import");
 }
 
 

@@ -72,7 +72,7 @@ typedef struct dt_iop_cacorrect_data_t
 const char *name()
 {
   // make sure you put all your translatable strings into _() !
-  return _("raw chromatic aberrations");
+  return _("Raw Chromatic Aberrations");
 }
 
 const char **description(dt_iop_module_t *self)

@@ -65,7 +65,7 @@ typedef struct dt_lib_recentcollect_t
 
 const char *name(dt_lib_module_t *self)
 {
-  return _("recently used collections");
+  return _("Recently Used Collections");
 }
 
 const char *description(dt_lib_module_t *self)

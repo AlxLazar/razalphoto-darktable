@@ -118,7 +118,7 @@ typedef struct dt_iop_exposure_global_data_t
 
 const char *name()
 {
-  return _("exposure");
+  return _("Exposure");
 }
 
 const char** description(dt_iop_module_t *self)

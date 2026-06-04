@@ -101,7 +101,7 @@ typedef struct dt_iop_dither_data_t
 
 const char *name()
 {
-  return _("dither or posterize");
+  return _("Dither or Posterize");
 }
 
 const char *aliases()

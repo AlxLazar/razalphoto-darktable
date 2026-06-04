@@ -140,7 +140,7 @@ static void free_tz_tuple(gpointer data)
 
 const char *name(dt_lib_module_t *self)
 {
-  return _("geotagging");
+  return _("Geotagging");
 }
 
 const char *description(dt_lib_module_t *self)

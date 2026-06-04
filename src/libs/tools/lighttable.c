@@ -61,7 +61,7 @@ static void _set_zoom(dt_lib_module_t *self, int zoom);
 
 const char *name(dt_lib_module_t *self)
 {
-  return _("lighttable");
+  return _("Lighttable");
 }
 
 dt_view_type_flags_t views(dt_lib_module_t *self)

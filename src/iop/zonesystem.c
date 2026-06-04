@@ -90,7 +90,7 @@ typedef struct dt_iop_zonesystem_gui_data_t
 
 const char *name()
 {
-  return _("zone system");
+  return _("Zone System");
 }
 
 int flags()

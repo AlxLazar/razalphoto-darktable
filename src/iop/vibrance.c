@@ -61,7 +61,7 @@ const char *deprecated_msg()
 
 const char *name()
 {
-  return _("vibrance");
+  return _("Vibrance");
 }
 
 const char *aliases()

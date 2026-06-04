@@ -45,7 +45,7 @@ DT_MODULE(4)
 
 const char *name(dt_lib_module_t *self)
 {
-  return _("print settings");
+  return _("Print Settings");
 }
 
 dt_view_type_flags_t views(dt_lib_module_t *self)

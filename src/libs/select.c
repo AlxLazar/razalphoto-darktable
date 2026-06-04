@@ -37,7 +37,7 @@ DT_MODULE(1)
 
 const char *name(dt_lib_module_t *self)
 {
-  return _("selection");
+  return _("Selection");
 }
 
 const char *description(dt_lib_module_t *self)

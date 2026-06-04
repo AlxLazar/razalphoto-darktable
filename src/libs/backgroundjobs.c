@@ -49,7 +49,7 @@ static void _lib_backgroundjobs_message_updated(dt_lib_module_t *self, dt_lib_ba
 
 const char *name(dt_lib_module_t *self)
 {
-  return _("background jobs");
+  return _("Background Jobs");
 }
 
 dt_view_type_flags_t views(dt_lib_module_t *self)

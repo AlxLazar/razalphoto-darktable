@@ -64,7 +64,7 @@ typedef struct dt_iop_primaries_global_data_t
 
 const char *name()
 {
-  return _("rgb primaries");
+  return _("RGB Primaries");
 }
 
 const char **description(dt_iop_module_t *self)

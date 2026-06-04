@@ -99,7 +99,7 @@ typedef struct dt_lib_timeline_t
 
 const char *name(dt_lib_module_t *self)
 {
-  return _("timeline");
+  return _("Timeline");
 }
 
 dt_view_type_flags_t views(dt_lib_module_t *self)

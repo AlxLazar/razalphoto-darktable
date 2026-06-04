@@ -70,7 +70,7 @@ typedef struct dt_lib_colorpicker_t
 
 const char *name(dt_lib_module_t *self)
 {
-  return _("color picker");
+  return _("Color Picker");
 }
 
 dt_view_type_flags_t views(dt_lib_module_t *self)

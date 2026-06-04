@@ -58,7 +58,7 @@ typedef struct dt_lib_masks_t
 
 const char *name(dt_lib_module_t *self)
 {
-  return _("mask manager");
+  return _("Mask Manager");
 }
 
 const char *description(dt_lib_module_t *self)

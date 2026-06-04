@@ -75,7 +75,7 @@ typedef struct dt_iop_colorout_gui_data_t
 
 const char *name()
 {
-  return _("output color profile");
+  return _("Output Color Profile");
 }
 
 

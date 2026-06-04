@@ -36,7 +36,7 @@ DT_MODULE(1)
 
 const char *name(dt_lib_module_t *self)
 {
-  return _("map settings");
+  return _("Map Settings");
 }
 
 dt_view_type_flags_t views(dt_lib_module_t *self)

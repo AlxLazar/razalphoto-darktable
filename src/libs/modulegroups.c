@@ -190,7 +190,7 @@ static void _buttons_update(dt_lib_module_t *self);
 
 const char *name(dt_lib_module_t *self)
 {
-  return _("modulegroups");
+  return _("Module Groups");
 }
 
 dt_view_type_flags_t views(dt_lib_module_t *self)

@@ -88,7 +88,7 @@ typedef struct dt_rasterfile_cache_t
 
 const char *name()
 {
-  return _("external raster masks");
+  return _("External Raster Masks");
 }
 
 const char *aliases()

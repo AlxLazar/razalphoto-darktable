@@ -122,7 +122,7 @@ static gboolean _auto_detect_button_enable_idle(gpointer user_data);
 
 const char *name()
 {
-  return _("color harmonizer");
+  return _("Color Harmonizer");
 }
 
 const char **description(dt_iop_module_t *self)

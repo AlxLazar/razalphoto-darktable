@@ -76,7 +76,7 @@ typedef struct dt_lib_camera_t
 
 const char *name(dt_lib_module_t *self)
 {
-  return _("camera settings");
+  return _("Camera Settings");
 }
 
 dt_view_type_flags_t views(dt_lib_module_t *self)

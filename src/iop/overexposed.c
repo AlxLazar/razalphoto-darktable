@@ -65,7 +65,7 @@ typedef struct dt_iop_overexposed_t
 
 const char *name()
 {
-  return _("overexposed");
+  return _("Overexposed");
 }
 
 int default_group()

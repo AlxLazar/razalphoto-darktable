@@ -120,7 +120,7 @@ typedef struct dt_iop_channelmixer_global_data_t
 
 const char *name()
 {
-  return _("channel mixer");
+  return _("Channel Mixer");
 }
 
 const char *deprecated_msg()

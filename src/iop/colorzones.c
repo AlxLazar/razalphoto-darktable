@@ -132,7 +132,7 @@ typedef struct dt_iop_colorzones_global_data_t
 
 const char *name()
 {
-  return _("color zones");
+  return _("Color Zones");
 }
 
 const char **description(dt_iop_module_t *self)

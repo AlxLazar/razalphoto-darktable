@@ -53,7 +53,7 @@ static gboolean _lib_ratings_button_release_callback(GtkWidget *widget, GdkEvent
 
 const char *name(dt_lib_module_t *self)
 {
-  return _("ratings");
+  return _("Ratings");
 }
 
 dt_view_type_flags_t views(dt_lib_module_t *self)

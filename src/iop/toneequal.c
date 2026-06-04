@@ -313,7 +313,7 @@ static void _unset_distort_signal(dt_iop_module_t *self);
 
 const char *name()
 {
-  return _("tone equalizer");
+  return _("Tone Equalizer");
 }
 
 const char *aliases()

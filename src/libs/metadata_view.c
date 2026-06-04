@@ -180,7 +180,7 @@ static gboolean _dndactive = FALSE;
 
 const char *name(dt_lib_module_t *self)
 {
-  return _("image information");
+  return _("Image Information");
 }
 
 dt_view_type_flags_t views(dt_lib_module_t *self)

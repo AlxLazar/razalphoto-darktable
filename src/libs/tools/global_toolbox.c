@@ -57,7 +57,7 @@ static gboolean _lib_keymap_button_press_release(GtkWidget *button, GdkEventButt
 
 const char *name(dt_lib_module_t *self)
 {
-  return _("preferences");
+  return _("Preferences");
 }
 
 dt_view_type_flags_t views(dt_lib_module_t *self)

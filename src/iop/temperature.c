@@ -238,7 +238,7 @@ static gboolean _ignore_missing_wb(dt_image_t *img)
 
 const char *name()
 {
-  return C_("modulename", "white balance");
+  return C_("modulename", "White Balance");
 }
 
 const char **description(dt_iop_module_t *self)

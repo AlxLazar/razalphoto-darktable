@@ -119,7 +119,7 @@ typedef struct dt_iop_atrous_data_t
 
 const char *name()
 {
-  return _("contrast equalizer");
+  return _("Contrast Equalizer");
 }
 
 const char *aliases()

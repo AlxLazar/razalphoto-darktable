@@ -57,7 +57,7 @@ static void _switch_view(const dt_view_t *view);
 
 const char *name(dt_lib_module_t *self)
 {
-  return _("viewswitcher");
+  return _("View Switcher");
 }
 
 dt_view_type_flags_t views(dt_lib_module_t *self)

@@ -159,7 +159,7 @@ const char *deprecated_msg()
 
 const char *name()
 {
-  return _("basic adjustments");
+  return _("Basic Adjustments");
 }
 
 const char **description(dt_iop_module_t *self)

@@ -49,7 +49,7 @@ static const gchar *rgb_names[DT_SCOPES_RGB_N] =
 
 const char *name(dt_lib_module_t *self)
 {
-  return _("scopes");
+  return _("Scopes");
 }
 
 dt_view_type_flags_t views(dt_lib_module_t *self)

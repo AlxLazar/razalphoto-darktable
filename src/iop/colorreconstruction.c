@@ -108,7 +108,7 @@ typedef struct dt_iop_colorreconstruct_global_data_t
 
 const char *name()
 {
-  return _("color reconstruction");
+  return _("Color Reconstruction");
 }
 
 const char **description(dt_iop_module_t *self)

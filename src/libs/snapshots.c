@@ -96,7 +96,7 @@ static void _lib_snapshots_restore_callback(GtkButton *widget,
 
 const char *name(dt_lib_module_t *self)
 {
-  return _("snapshots");
+  return _("Snapshots");
 }
 
 const char *description(dt_lib_module_t *self)

@@ -449,7 +449,7 @@ int legacy_params(dt_iop_module_t *self,
 
 const char *name()
 {
-  return _("watermark");
+  return _("Watermark");
 }
 
 const char **description(dt_iop_module_t *self)

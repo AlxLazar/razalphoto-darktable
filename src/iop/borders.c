@@ -303,7 +303,7 @@ typedef struct dt_iop_borders_params_t dt_iop_borders_data_t;
 
 const char *name()
 {
-  return _("framing");
+  return _("Framing");
 }
 
 const char *aliases()

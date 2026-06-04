@@ -62,7 +62,7 @@ typedef struct dt_lib_metadata_t
 
 const char *name(dt_lib_module_t *self)
 {
-  return _("metadata editor");
+  return _("Metadata Editor");
 }
 
 const char *description(dt_lib_module_t *self)

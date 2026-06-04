@@ -69,7 +69,7 @@ typedef struct dt_iop_enlargecanvas_gui_data_t
 
 const char *name()
 {
-  return _("enlarge canvas");
+  return _("Enlarge Canvas");
 }
 
 const char** description(dt_iop_module_t *self)

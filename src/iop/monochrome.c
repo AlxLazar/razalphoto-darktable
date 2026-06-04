@@ -72,7 +72,7 @@ typedef struct dt_iop_monochrome_global_data_t
 
 const char *name()
 {
-  return _("monochrome");
+  return _("Monochrome");
 }
 
 int default_group()

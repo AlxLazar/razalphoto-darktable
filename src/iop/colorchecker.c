@@ -115,7 +115,7 @@ typedef struct dt_iop_colorchecker_global_data_t
 
 const char *name()
 {
-  return _("color look up table");
+  return _("Color Look Up Table");
 }
 
 const char *aliases()

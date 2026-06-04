@@ -117,7 +117,7 @@ typedef struct dt_iop_colorin_data_t
 
 const char *name()
 {
-  return _("input color profile");
+  return _("Input Color Profile");
 }
 
 const char **description(dt_iop_module_t *self)

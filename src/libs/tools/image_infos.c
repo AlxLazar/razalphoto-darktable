@@ -37,7 +37,7 @@ typedef struct dt_lib_imageinfo_t
 
 const char *name(dt_lib_module_t *self)
 {
-  return _("image infos");
+  return _("Image Infos");
 }
 
 dt_view_type_flags_t views(dt_lib_module_t *self)

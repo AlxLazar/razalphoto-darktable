@@ -78,7 +78,7 @@ const char *deprecated_msg()
 
 const char *name()
 {
-  return _("contrast brightness saturation");
+  return _("Contrast Brightness Saturation");
 }
 
 const char **description(dt_iop_module_t *self)

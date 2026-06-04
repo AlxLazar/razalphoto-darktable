@@ -199,7 +199,7 @@ typedef struct dt_iop_colorequal_global_data_t
 
 const char *name()
 {
-  return _("color equalizer");
+  return _("Color Equalizer");
 }
 
 const char *aliases()

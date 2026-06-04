@@ -810,7 +810,7 @@ void init_presets(dt_iop_module_so_t *self)
 
 const char *name()
 {
-  return _("denoise (profiled)");
+  return _("Denoise (Profiled)");
 }
 
 const char **description(dt_iop_module_t *self)

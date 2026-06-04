@@ -107,7 +107,7 @@ static void _save_last_tag_used(const char *tags,
 
 const char *name(dt_lib_module_t *self)
 {
-  return _("tagging");
+  return _("Tagging");
 }
 
 const char *description(dt_lib_module_t *self)

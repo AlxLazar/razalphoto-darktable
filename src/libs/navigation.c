@@ -73,7 +73,7 @@ static void _lib_navigation_set_position(struct dt_lib_module_t *self,
 
 const char *name(dt_lib_module_t *self)
 {
-  return _("navigation");
+  return _("Navigation");
 }
 
 dt_view_type_flags_t views(dt_lib_module_t *self)

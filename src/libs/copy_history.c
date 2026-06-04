@@ -50,7 +50,7 @@ typedef struct dt_lib_copy_history_t
 
 const char *name(dt_lib_module_t *self)
 {
-  return _("history stack");
+  return _("History Stack");
 }
 
 const char *description(dt_lib_module_t *self)

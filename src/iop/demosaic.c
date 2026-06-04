@@ -311,7 +311,7 @@ void amaze_demosaic(const float *const in,
 
 const char *name()
 {
-  return _("demosaic");
+  return _("Demosaic");
 }
 
 const char **description(dt_iop_module_t *self)

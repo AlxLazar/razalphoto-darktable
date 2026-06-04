@@ -119,7 +119,7 @@ typedef struct dt_iop_crop_data_t
 
 const char *name()
 {
-  return _("crop");
+  return _("Crop");
 }
 
 const char *aliases()

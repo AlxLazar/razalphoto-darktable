@@ -66,7 +66,7 @@ typedef struct dt_iop_defringe_gui_data_t
 
 const char *name()
 {
-  return _("defringe");
+  return _("Defringe");
 }
 
 const char *aliases()

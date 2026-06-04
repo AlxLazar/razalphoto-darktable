@@ -58,7 +58,7 @@ typedef struct dt_iop_rlce_data_t
 
 const char *name()
 {
-  return _("old local contrast");
+  return _("Old Local Contrast");
 }
 
 int default_group()

@@ -70,7 +70,7 @@ static void adjust_aabb(const int32_t *p, int32_t *aabb)
 
 const char *name()
 {
-  return _("orientation");
+  return _("Orientation");
 }
 
 const char *aliases()

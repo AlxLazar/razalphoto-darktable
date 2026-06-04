@@ -157,7 +157,7 @@ typedef struct dt_iop_cacorrectrgb_gui_data_t
 
 const char *name()
 {
-  return _("chromatic aberrations");
+  return _("Chromatic Aberrations");
 }
 
 const char **description(dt_iop_module_t *self)

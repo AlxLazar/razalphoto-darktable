@@ -93,7 +93,7 @@ typedef struct dt_iop_rawprepare_global_data_t
 
 const char *name()
 {
-  return C_("modulename", "raw black/white point");
+  return C_("modulename", "Raw Black/White Point");
 }
 
 int operation_tags()

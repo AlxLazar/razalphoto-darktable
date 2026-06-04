@@ -75,7 +75,7 @@ typedef struct dt_iop_blurs_global_data_t
 
 const char *name()
 {
-  return _("blurs");
+  return _("Blurs");
 }
 
 const char *aliases()

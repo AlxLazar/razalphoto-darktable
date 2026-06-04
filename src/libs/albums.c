@@ -79,7 +79,7 @@ typedef struct dt_lib_albums_t
 
 const char *name(dt_lib_module_t *self)
 {
-  return _("albums");
+  return _("Albums");
 }
 
 const char *description(dt_lib_module_t *self)

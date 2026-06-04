@@ -50,7 +50,7 @@ typedef struct dt_lib_styles_t
 
 const char *name(dt_lib_module_t *self)
 {
-  return _("styles");
+  return _("Styles");
 }
 
 const char *description(dt_lib_module_t *self)

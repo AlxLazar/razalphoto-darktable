@@ -264,7 +264,7 @@ static _filter_t *_filters_get(const dt_collection_properties_t prop)
 
 const char *name(dt_lib_module_t *self)
 {
-  return _("collection filters");
+  return _("Collection Filters");
 }
 
 const char *description(dt_lib_module_t *self)

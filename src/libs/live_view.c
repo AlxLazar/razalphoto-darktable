@@ -119,7 +119,7 @@ static void overlay_changed(GtkWidget *combo,
 
 const char *name(dt_lib_module_t *self)
 {
-  return _("live view");
+  return _("Live View");
 }
 
 dt_view_type_flags_t views(dt_lib_module_t *self)

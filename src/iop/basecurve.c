@@ -360,7 +360,7 @@ typedef struct dt_iop_basecurve_global_data_t
 
 const char *name()
 {
-  return _("base curve");
+  return _("Base Curve");
 }
 
 const char **description(dt_iop_module_t *self)

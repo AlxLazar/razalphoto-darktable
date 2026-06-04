@@ -71,7 +71,7 @@ typedef struct dt_iop_bilat_gui_data_t
 // this returns a translatable name
 const char *name()
 {
-  return _("local contrast");
+  return _("Local Contrast");
 }
 
 const char *aliases()

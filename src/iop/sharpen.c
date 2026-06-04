@@ -67,7 +67,7 @@ typedef struct dt_iop_sharpen_global_data_t
 
 const char *name()
 {
-  return C_("modulename", "sharpen");
+  return C_("modulename", "Sharpen");
 }
 
 int default_group()

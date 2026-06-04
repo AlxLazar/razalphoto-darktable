@@ -111,7 +111,7 @@ const char *deprecated_msg()
 
 const char *name()
 {
-  return _("levels");
+  return _("Levels");
 }
 
 int default_group()

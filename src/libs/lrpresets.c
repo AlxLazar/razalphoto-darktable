@@ -102,7 +102,7 @@ static const GtkTargetEntry DND_TARGETS[] = {
 
 const char *name(dt_lib_module_t *self)
 {
-  return _("lr presets");
+  return _("LR Presets");
 }
 
 const char *description(dt_lib_module_t *self)

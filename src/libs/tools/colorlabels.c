@@ -61,7 +61,7 @@ gint _get_colorlabel(dt_lib_module_t *self, GtkWidget *w)
 
 const char *name(dt_lib_module_t *self)
 {
-  return _("colorlabels");
+  return _("Color Labels");
 }
 
 dt_view_type_flags_t views(dt_lib_module_t *self)

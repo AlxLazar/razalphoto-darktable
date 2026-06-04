@@ -382,7 +382,7 @@ static float dt_lut_lookup_2d_1c(const float *grain_lut, const float x, const fl
 
 const char *name()
 {
-  return _("grain");
+  return _("Grain");
 }
 
 const char **description(dt_iop_module_t *self)

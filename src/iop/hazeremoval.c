@@ -95,7 +95,7 @@ typedef struct dt_iop_hazeremoval_global_data_t
 
 const char *name()
 {
-  return _("haze removal");
+  return _("Haze Removal");
 }
 
 

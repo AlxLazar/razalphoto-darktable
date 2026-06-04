@@ -114,7 +114,7 @@ typedef struct dt_iop_shadhi_global_data_t
 
 const char *name()
 {
-  return _("shadows and highlights");
+  return _("Shadows and Highlights");
 }
 
 int flags()

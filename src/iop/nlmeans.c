@@ -72,7 +72,7 @@ typedef struct dt_iop_nlmeans_global_data_t
 
 const char *name()
 {
-  return _("astrophoto denoise");
+  return _("Astrophoto Denoise");
 }
 
 const char *aliases()

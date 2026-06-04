@@ -189,7 +189,7 @@ typedef struct dt_iop_sigmoid_global_data_t
 
 const char *name()
 {
-  return _("sigmoid");
+  return _("Sigmoid");
 }
 
 const char *aliases()

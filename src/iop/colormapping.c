@@ -142,7 +142,7 @@ typedef struct dt_iop_colormapping_global_data_t
 
 const char *name()
 {
-  return _("color mapping");
+  return _("Color Mapping");
 }
 
 const char **description(dt_iop_module_t *self)

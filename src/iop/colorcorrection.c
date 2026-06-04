@@ -65,7 +65,7 @@ typedef struct dt_iop_colorcorrection_global_data_t
 
 const char *name()
 {
-  return _("color correction");
+  return _("Color Correction");
 }
 
 const char **description(dt_iop_module_t *self)

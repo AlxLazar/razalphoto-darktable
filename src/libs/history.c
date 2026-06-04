@@ -95,7 +95,7 @@ static void _lib_history_module_remove_callback(gpointer instance,
 
 const char *name(dt_lib_module_t *self)
 {
-  return _("history");
+  return _("History");
 }
 
 const char *description(dt_lib_module_t *self)

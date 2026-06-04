@@ -159,7 +159,7 @@ int last_state = 0;
 
 const char *name(dt_lib_module_t *self)
 {
-  return _("collections");
+  return _("Collections");
 }
 
 const char *description(dt_lib_module_t *self)
